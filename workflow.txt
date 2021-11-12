@@ -2,6 +2,7 @@
 table_creation.py - for coding the database, and star schema
 table_queries.py - contains the queries for creating databases,dropping databases, creating tables for star schemas, and inserting values at tables 
 etl.ipynb - extract data from source, transform and clean it, load it into data warehouse
+config.dwh - pretty much just like an env file where you store variables you wouldn't want anyone to see or place to store secret values 
 
 // WORKFLOW 1 - HIGH LEVEL WORKFLOW 
 - sources (oltp or operational database)
