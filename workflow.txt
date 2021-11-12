@@ -1,0 +1,69 @@
+// WORKFLOW 0 - FILE GUIDE
+table_creation.py - for coding the database, and star schema
+table_queries.py - contains the queries for creating databases,dropping databases, creating tables for star schemas, and inserting values at tables 
+etl.ipynb - extract data from source, transform and clean it, load it into data warehouse
+
+// WORKFLOW 1 - HIGH LEVEL WORKFLOW 
+- sources (oltp or operational database)
+- design dimensional model (schema) for data warehouse
+- code redshift(data warehouse in cloud)
+- etl ,staging area
+    - etl: extract transform and load 
+    - staging area: storage area used for data processing during the etl (in this case a dataframe) 
+- store transformed data in redshift(inserting values at tables)
+- data mart 
+- analysis on data marts 
+
+// WORKFLOW 2 - LOW LEVEL WORKFLOW 
+- determine what schema to use 
+    - star schema 
+        - speed and performace is better in here but less data integrity(less consistency and more duplication)
+    - snowflake schema 
+        - data and integrity is better in here but less speed and performance 
+- create an er diagram (physical er diagram) (star schema for one dimension): use app.diagrams.net | note: star schemas dimension tables aren't normalized, and star schema's only 1d thus easier to query and only one join to make unlike snowflake schema 
+    - determine fact table  
+        - usually tables with quantifiable metrics or things that can be measured and keys to other dimensional table 
+        - simplest rule is a fact is usually numeric and additive (additive means you can use dimensions to add up to a result in a fact table, e.g. fact table contains date,store,product,and sales_amount. sales_amount is a fact since it's numeric and additive, it's additive because the sum of sales_amount for all 7 days in a week represents the total sales amount for that week(this addition involves date,store,and product))
+        - example 
+            - invoice number is numeric but adding it does not make sense (not a good fact)
+            - total amount of an invoice could be added to compute total sales (a good fact)
+            - sales revenue (good fact)
+    - determine dimension tables 
+        - read the context of the business events, answer who, what,where, why, etc.
+        - example 
+            - date & time are always a dimension 
+            - physical locations their attributes are good candidates dimensions 
+            - human roles like customers and staff always good candidates for dimension 
+            - goods sold are always a good candidates for dimensions 
+    - determine relationships for each table 
+    - determine field for each table 
+    - determine the primary and foreign keys in each table 
+    - determine datatypes and constraints for each field in each table 
+        - datatypes
+            - varchar(size) for strings 
+            - char(1) for characters | e.g. m or f 
+            - float(size) for numbers with floating points
+            - integers for whole numbers 
+            - timestamp for dates (date with mm/dd/yyyy)
+            - serial for primary keys for fact tables | used to automatically generate unique integer numbers (IDs, identity, etc.)
+        - constraints 
+            - primary key for obviously primary key 
+            - not null for IDs that aren't primary key, because primary key are already auto not null values 
+- NOTE: this step is not included in this project | perform normalization to convert star schema into snowflake schema | snowflake and star schemas are data warehouse schemas 
+    - 1nf: do not have repeating values on an attribute 
+    - 2nf: 
+    - 3nf: 
+- code the schema created, in this case it's a star schema 
+    - create database
+    - create table
+- staging area 
+    - extract data from primary source 
+    - load it into a dataframe 
+    - transform and clean the values inside the dataframe
+- create an etl to transform and clean the data before loading it into respective tables
+    - extract 
+        - extract values you need from the cleaned dataframe 
+    - transform 
+        - transform it the way it would fit the way you want in a table 
+    - load 
+        - loading thru inserting values at the database table
